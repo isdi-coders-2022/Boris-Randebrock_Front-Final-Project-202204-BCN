@@ -1,4 +1,4 @@
-//  import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { Provider } from "react-redux";
@@ -36,41 +36,21 @@ describe("Given a SongComponent", () => {
       expect(deleteButton).toBeInTheDocument();
     });
   });
+  describe("When the details-button is clicked", () => {
+    test("Then it should navigate to the details page", () => {
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <SongList />
+            <SongComponent song />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      const detailsButton = screen.getByText("details");
+      userEvent.click(detailsButton);
+
+      expect(detailsButton).toBeInTheDocument();
+    });
+  });
 });
-
-// describe("Given the SongForm component", () => {
-//   describe("When rendered and the cancel-button is pressed", () => {
-//     test("Then it should navigate to /songlist", () => {
-//       const mockUseNavigate = jest.fn();
-
-//       jest.mock("react-router-dom", () => ({
-//         useNavigate: () => mockUseNavigate,
-//       }));
-
-//       let mockLogged = false;
-
-//       const cancelButton = "/songlist";
-
-//       const mockUserSlice = createSlice({
-//         name: "song",
-//         initialState: { logged: mockLogged },
-//         reducers: {},
-//       });
-//       const mockStore = configureStore({
-//         reducer: { user: mockUserSlice.reducer },
-//       });
-
-//       render(
-//         <Provider store={mockStore}>
-//           <BrowserRouter>
-//             <SongComponent />
-//           </BrowserRouter>
-//         </Provider>
-//       );
-
-//       expect(mockUseNavigate).toHaveBeenCalledWith(cancelButton);
-
-//       // expect(deleteButton).toBeInTheDocument();
-//     });
-//   });
-// });
