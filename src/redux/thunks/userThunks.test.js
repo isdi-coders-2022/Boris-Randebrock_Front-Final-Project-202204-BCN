@@ -129,6 +129,22 @@ describe("Given the registerUserThunk", () => {
         "user already exists"
       );
     });
+    test("Then it should call the wrong action toast with the message 'user already exists'", async () => {
+      const dispatch = jest.fn();
+      const mockWrongAction = jest.spyOn(toasters, "wrongAction");
+
+      const userData = {
+        username: "Error",
+        password: "Error",
+        name: "Error",
+      };
+      axios.post = jest.fn().mockRejectedValueOnce(new Error());
+
+      const thunk = await registerThunk(userData);
+      await thunk(dispatch);
+
+      expect(mockWrongAction).toHaveBeenLastCalledWith("user already exists!");
+    });
   });
   describe("When invoked succesfully", () => {
     test("Then it should show correctAction toastify", async () => {

@@ -3,6 +3,8 @@ import { Provider } from "react-redux";
 import SongList from "./SongList";
 import store from "../../redux/store/store";
 import { BrowserRouter } from "react-router-dom";
+import SongComponent from "../Song/SongComponent";
+import userEvent from "@testing-library/user-event";
 
 describe("Given the SongList component", () => {
   describe("When it is rendered", () => {
@@ -20,15 +22,7 @@ describe("Given the SongList component", () => {
 
       expect(testElement).toBeInTheDocument();
     });
-    test("Then a li should be present with the key song", () => {
-      render(
-        <BrowserRouter>
-          <Provider store={store}>
-            <SongList />
-          </Provider>
-        </BrowserRouter>
-      );
-    });
+
     test("Then a listItem should be present with the key song", () => {
       render(
         <BrowserRouter>
@@ -43,6 +37,25 @@ describe("Given the SongList component", () => {
       });
 
       expect(testElement).toBeInTheDocument();
+    });
+  });
+
+  describe("When the details-button is clicked", () => {
+    test("Then it should navigate to the details page", () => {
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <SongList />
+            <SongComponent song />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      const detailsButton = screen.getByText("details");
+      userEvent.click(detailsButton);
+
+      expect(detailsButton).toBeInTheDocument();
+      expect(detailsButton).not.toHaveAttribute("type", "button");
     });
   });
 });
