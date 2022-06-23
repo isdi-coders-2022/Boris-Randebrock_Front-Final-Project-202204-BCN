@@ -1,10 +1,11 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import App from "./App";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import userEvent from "@testing-library/user-event";
+import store from "./redux/store/store";
 
 jest.mock("jwt-decode", () => () => ({
   id: "1",
@@ -136,7 +137,6 @@ describe("Given the App component", () => {
       let mockLogged = false;
 
       const logginButton = "/songlist";
-      // userEvent().click(logginButton);
 
       const mockUserSlice = createSlice({
         name: "user",
@@ -156,6 +156,110 @@ describe("Given the App component", () => {
       );
 
       expect(mockUseNavigate).not.toHaveBeenCalledWith(logginButton);
+    });
+  });
+});
+
+describe("Given an App component function", () => {
+  describe("When invoked and the user is not logged", () => {
+    test("Then it should render a login form with a 'login' button", async () => {
+      const expectedButtonText = "login";
+
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      const loginButton = screen.getByRole("button", {
+        name: expectedButtonText,
+      });
+
+      expect(loginButton).toBeInTheDocument();
+    });
+  });
+
+  describe("When invoked and the user is logged", () => {
+    test("Then it should render a navigation element", async () => {
+      const actionLogin = {
+        type: "user/login",
+        payload: {
+          username: "fra432",
+          id: "62a0a3ad54725136008cb9d8",
+        },
+      };
+
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        store.dispatch(actionLogin);
+      });
+
+      const navElement = screen.getByText("login");
+
+      expect(navElement).toBeInTheDocument();
+    });
+    test("Then the user should navigate to /songlist", async () => {
+      const actionLogin = {
+        type: "user/login",
+        payload: {
+          username: "fra432",
+          id: "62a0a3ad54725136008cb9d8",
+        },
+      };
+
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        store.dispatch(actionLogin);
+      });
+
+      const navElement = screen.getByText("login");
+
+      userEvent.click(navElement);
+
+      expect(mockUseNavigate).toHaveBeenCalled();
+    });
+    test("Then the loginCreator should be called", async () => {
+      const actionLogin = {
+        type: "user/login",
+        payload: {
+          username: "fra432",
+          id: "62a0a3ad54725136008cb9d8",
+        },
+      };
+
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      await waitFor(() => {
+        store.dispatch(actionLogin);
+      });
+
+      const navElement = screen.getByText("login");
+
+      userEvent.click(navElement);
+
+      expect(mockUseNavigate).toHaveBeenCalled();
     });
   });
 });

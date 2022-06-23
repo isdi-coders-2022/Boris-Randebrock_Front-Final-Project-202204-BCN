@@ -59,3 +59,20 @@ describe("Given the SongList component", () => {
     });
   });
 });
+
+describe("Given a SongList component", () => {
+  describe("When instantiated", () => {
+    test("Then it should show a list of songs", () => {
+      render(
+        <BrowserRouter>
+          <Provider store={store}>
+            <SongList />
+          </Provider>
+        </BrowserRouter>
+      );
+      const listItems = screen.getByText("Songlist");
+
+      expect(listItems).toBeInTheDocument();
+    });
+  });
+});
