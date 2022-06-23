@@ -11,17 +11,17 @@ const SongDetailsComponent = () => {
   const song = useSelector((state) => state.oneSong);
 
   const handleDelete = () => {
-    dispatch(deleteSongThunk(song.id));
+    dispatch(deleteSongThunk(song._id));
   };
 
   const goToSonglistPage = () => {
     navigate("/songlist");
   };
 
-  // const deleteAndGoToSonglistPage = () => {
-  //   handleDelete();
-  //   goToSonglistPage();
-  // };
+  const deleteAndGoToSonglistPage = () => {
+    handleDelete();
+    goToSonglistPage();
+  };
 
   return (
     <SongStyle>
@@ -76,7 +76,7 @@ const SongDetailsComponent = () => {
                 styleType="primary"
                 action={goToSonglistPage}
               />
-              <button className="secondary" onClick={handleDelete}>
+              <button className="secondary" onClick={deleteAndGoToSonglistPage}>
                 delete
               </button>
             </li>
