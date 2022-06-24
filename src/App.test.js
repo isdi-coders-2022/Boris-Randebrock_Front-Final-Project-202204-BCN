@@ -263,3 +263,44 @@ describe("Given an App component function", () => {
     });
   });
 });
+
+const userLoggedCredentials = {
+  username: "fra432",
+  password: "1234",
+};
+jest.mock("jwt-decode", () => () => userLoggedCredentials);
+
+describe("Given this App component", () => {
+  describe("When it's instantiated with a token in local storage", () => {
+    test("Then it should show a list item", () => {
+      Object.defineProperty(window, "localStorage", {
+        value: {
+          getItem: jest.fn(() => "token"),
+        },
+      });
+
+      const userMockSlice = createSlice({
+        name: "user",
+        initialState: { name: "fra432", password: "1234", logged: true },
+        reducers: {},
+      });
+      const mockStore = configureStore({
+        reducer: {
+          user: userMockSlice.reducer,
+        },
+      });
+
+      render(
+        <BrowserRouter>
+          <Provider store={mockStore}>
+            <App />
+          </Provider>
+        </BrowserRouter>
+      );
+
+      const list = screen.getByText("it`s only rock 'n' roll");
+
+      expect(list).toBeInTheDocument();
+    });
+  });
+});
