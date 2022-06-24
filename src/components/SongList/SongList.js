@@ -9,11 +9,13 @@ const SongList = () => {
     <SongListStyles>
       <h1>Songlist</h1>
       <ul>
-        {songs.map((song, index) => (
-          <li>
-            <SongComponent song={song} />
-          </li>
-        ))}
+        {songs.map((song, index) => {
+          return (
+            <li>
+              <SongComponent song={song} />
+            </li>
+          );
+        })}
       </ul>
     </SongListStyles>
   );

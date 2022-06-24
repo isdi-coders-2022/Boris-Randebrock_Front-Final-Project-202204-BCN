@@ -75,4 +75,17 @@ describe("Given a SongList component", () => {
       expect(listItems).toBeInTheDocument();
     });
   });
+  describe("When invoked", () => {
+    test("Then it should render a title with a text 'Songlist'", () => {
+      const expectedText = "Songlist";
+      render(
+        <Provider store={store}>
+          <SongList />
+        </Provider>
+      );
+      const result = screen.getByText("Songlist");
+
+      expect(result.textContent).toBe(expectedText);
+    });
+  });
 });
