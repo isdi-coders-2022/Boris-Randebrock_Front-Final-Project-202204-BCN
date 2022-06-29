@@ -4,18 +4,13 @@ import SongListStyles from "./SongListStyles";
 
 const SongList = () => {
   const songs = useSelector((state) => state.song);
-
   return (
     <SongListStyles>
       <h1>Songlist</h1>
       <ul>
-        {songs.map((song, index) => {
-          return (
-            <li>
-              <SongComponent song={song} />
-            </li>
-          );
-        })}
+        {songs.map((song, index) => (
+          <SongComponent song={song} key={song._id} />
+        ))}
       </ul>
     </SongListStyles>
   );
