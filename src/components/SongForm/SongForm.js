@@ -133,7 +133,7 @@ const SongForm = () => {
               id="releaseDate"
               value={formData.releaseDate}
               onChange={updateDataInput}
-              placeholder="date: "
+              placeholder="date: month/day/year"
             />
           </label>
           <label htmlFor="lyrics">
